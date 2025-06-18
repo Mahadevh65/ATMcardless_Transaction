@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biometric ATM System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='atmhome.css') }}">
+</head>
+<body>
+    <style>
+         .msg{
+            color:red;
+         }
+         a{
+            text-decoration:none;
+            font-size:20px;
+            color:green;
+         }
+    </style>
+            <!-- ATM Screen -->
+    <div class="atm-container">
+        <div class="atm-screen">
+            <div class="screen-header">
+                <div class="bank-logo">
+                    <h2>SecureBank</h2>
+                </div>
+                <div class="datetime" id="datetime"></div>
+            </div>
+            
+            <div class="screen-content" id="screenContent">
+                <!-- Welcome Screen -->
+    <div class="screen welcome-screen active" id="welcomeScreen">
+            <div class="welcome-content">
+                <h1>Welcome to SecureBank ATM</h1>
+                <p class="welcome-subtitle">Secure Banking with Facial Biometric Technology</p>
+                <div class="mobile-input-section">
+                    <h3>Enter Your Mobile Number</h3>
+                        <form method="POST" action="/home">
+                            <input type="tel" name="mobile" id="mobileInput" placeholder="Enter 10-digit mobile number" maxlength="10" class="mobile-input" required>
+                            <button type="submit" class="proceed-btn" id="proceedBtn">Proceed</button>
+                        </form>
+                    <p class="input-help">Please enter the mobile number registered with your account</p>
+                    <h2 class="msg">{{message}}</h2>
+                    {%if user %}
+                    <a href="/"> Re-enter number </a>
+                    {%endif%}
+                </div>
+            </div>
+    </div>
+</div>
+</body>
+</html>

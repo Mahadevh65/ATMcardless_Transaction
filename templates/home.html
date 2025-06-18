@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+   <!-- <link rel="stylesheet" href="{{ url_for('static', filename='atmhome.css') }}">-->
+</head>
+<body>
+    <style>
+        body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.atm-container {
+    background: #2c3e50;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    padding: 30px;
+    /* max-width: 600px; */
+    width: 100%;
+}
+
+.atm-screen {
+    background: #1a1a1a;
+    border-radius: 15px;
+    padding: 0;
+    min-height: 500px;
+    border: 3px solid #34495e;
+    position: relative;
+    overflow: hidden;
+}
+
+        /* Biometric Screen Styles */
+.biometric-content {
+    text-align: center;
+}
+
+.biometric-content {
+    color: #3498db;
+    margin-bottom: 10px;
+}
+
+.mobile-display {
+    color: #ecf0f1;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.mobile-display span {
+    color: #3498db;
+    font-weight: bold;
+}
+
+.biometric-scanner {
+    margin-top: 20px;
+}
+
+.scanner-frame {
+    width: 250px;
+    height: 300px;
+    margin: 0 auto 20px;
+    border: 3px solid #3498db;
+    border-radius: 15px;
+    position: relative;
+    overflow: hidden;
+    background: #000;
+}
+
+.camera-view {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+}
+
+.face-outline {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 150px;
+    height: 180px;
+    border: 2px solid #3498db;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    opacity: 0.7;
+}
+
+.scanning-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #3498db, transparent);
+    animation: scanning 2s linear infinite;
+    opacity: 0;
+}
+
+.scanning-line.active {
+    opacity: 1;
+}
+
+@keyframes scanning {
+    0% { top: 0; }
+    100% { top: 100%; }
+}
+
+.scanner-text {
+    color: #ecf0f1;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.scan-btn {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s;
+    margin-bottom: 15px;
+}
+
+.scan-btn:hover {
+    background: #c0392b;
+    transform: translateY(-2px);
+}
+
+.back-btn-mobile {
+    background: #95a5a6;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.back-btn-mobile:hover {
+    background: #7f8c8d;
+}
+
+.camera-section {
+    position: relative;
+    width: 250px;
+    height: 300px;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 15px;
+    border: 3px solid #3498db;
+    background: black;
+}
+
+.camera-container video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+.face-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+}
+
+.face-circle {
+    width: 150px;
+    height: 180px;
+    border: 2px solid #00ffff;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    opacity: 0.8;
+}
+
+.camera-status {
+    position: absolute;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
+    color: #ecf0f1;
+    font-size: 14px;
+}
+.fail{
+    color:red;
+    text-align:center;
+    margin-top:10%;
+}
+.success{
+    color:green;
+}
+#pinInput{
+    width:80%;
+    padding:10px;
+    border-radius:5px;
+    border:1px, solid #ccc;
+    font-size:20px;
+    text-align:center;
+}
+a{
+    text-decoration:none;
+    color:red;
+    font-size:20px;
+}
+
+
+/*atm corners*/
+/* ATM Screen Corner Options Styling */
+
+/* Container for positioning options around screen edges */
+.atm-options-container {
+    position: relative;
+    width: 50%;
+    height: 100%;
+    min-height: 500px;
+    margin-left:25%;
+}
+
+/* Base styling for ATM option links */
+.atm-option {
+    display:grid;
+    margin-top:5px;
+    grid-template-columns: repeat(2, 1fr); 
+    gap:10px;
+    background: linear-gradient(145deg, #34495e, #2c3e50);
+    color: #ecf0f1;
+    text-decoration: none;
+    padding:20px;
+    border-radius: 8px;
+    font-size: 20px;
+    font-weight: bold;
+    border: 2px solid #3498db;
+    box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    min-width: 120px;
+    text-align: center;
+    z-index: 10;
+}
+
+/* Hover effects */
+.atm-option:hover {
+    background: linear-gradient(145deg, #3498db, #2980b9);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 
+        0 6px 12px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    border-color: #ecf0f1;
+}
+
+/* Active/pressed state */
+.atm-option:active {
+    transform: translateY(0);
+    box-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.3),
+        inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Corner positions */
+.atm-option.top-left {
+    top: 5px;
+    left: 5px;
+}
+
+.atm-option.top-right {
+    top: 5px;
+    right: 5px;
+}
+
+.atm-option.bottom-left {
+    bottom: 5px;
+    left: 5px;
+}
+
+.atm-option.bottom-right {
+    bottom: 5px;
+    right: 5px;
+}
+
+/* Side positions */
+.atm-option.left-center {
+    top: 50%;
+    left: 20px;
+    transform: translateY(-50%);
+}
+
+.atm-option.right-center {
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+}
+
+.atm-option.right-center:hover,
+.atm-option.left-center:hover {
+    transform: translateY(-50%) translateY(-2px);
+}
+
+/* Top and bottom center */
+.atm-option.top-center {
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.atm-option.bottom-center {
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.atm-option.top-center:hover,
+.atm-option.bottom-center:hover {
+    transform: translateX(-50%) translateY(-2px);
+}
+
+/* LED-like glow effect */
+.atm-option::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #3498db, #2980b9, #3498db);
+    border-radius: 10px;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.atm-option:hover::before {
+    opacity: 0.7;
+    animation: glow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from {
+        box-shadow: 0 0 5px #3498db;
+    }
+    to {
+        box-shadow: 0 0 20px #3498db, 0 0 30px #3498db;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .atm-option {
+        padding: 10px 15px;
+        font-size: 14px;
+        min-width: 100px;
+    }
+    
+    .atm-option.top-left,
+    .atm-option.top-right,
+    .atm-option.bottom-left,
+    .atm-option.bottom-right,
+    .atm-option.left-center,
+    .atm-option.right-center,
+    .atm-option.top-center,
+    .atm-option.bottom-center {
+        position: relative;
+        top: auto;
+        left: auto;
+        right: auto;
+        bottom: auto;
+        transform: none;
+        margin: 10px;
+        display: inline-block;
+    }
+}
+
+/* Special styling for bank selection links */
+.bank-option {
+    background: linear-gradient(145deg, #27ae60, #229954);
+    border-color: #2ecc71;
+}
+
+.bank-option:hover {
+    background: linear-gradient(145deg, #2ecc71, #27ae60);
+    border-color: #ecf0f1;
+}
+
+/* Retry/Back button styling */
+.retry-option {
+    background: linear-gradient(145deg, #e74c3c, #c0392b);
+    border-color: #e74c3c;
+}
+
+.retry-option:hover {
+    background: linear-gradient(145deg, #c0392b, #a93226);
+    border-color: #ecf0f1;
+}
+</style>
+    <div class="atm-container">
+        <div class="atm-screen">
+        <div class="screen biometric-screen" id="biometricScreen">
+            <div class="biometric-content">
+            <h2>Facial Biometric Authentication</h2>
+            
+            {% if ask_pin %}
+            <!--<h2 class="success">{{success}}</h2>-->
+        <!--   <form method="POST" action="/menu">
+                <input type="hidden" name="mobile" value="{{ mobile }}">
+                <label for="pin">Enter 4-digit PIN:</label>
+                <input type="password" name="pin" id="pin" maxlength="4" required>
+                <button type="submit">Submit</button>
+                </form>-->
+                <!--<h3>Accounts linked to {{ mobile }}</h3>-->
+                <!--<ul>
+                    {% for acc in accounts %}
+                    <li>
+                        <a href="{{ url_for('enter_pin', mobile=mobile, bank=acc.bank_name) }}">
+                            {{ acc.bank_name }}
+                        </a> - {{ acc.account_number }}
+                    </li>
+                    {% endfor %}
+                </ul>-->
+                <!-- Replace your existing biometric-screen div with this structure -->
+<div class="screen biometric-screen" id="biometricScreen">
+    <div class="atm-options-container">
+        <div class="biometric-content">
+            {% if ask_pin %}
+            <h2 class="success">{{success}}</h2>
+            <p class="mobile-display">Mobile: {{mobile}} <span id="displayMobile"></span></p>
+            <p style="color: #ecf0f1; margin-bottom: 50px;">Please choose your bank account</p>
+            
+            {% else %}
+            <h2 class="fail">{{fail}}</h2>
+            <p style="color: #ecf0f1; margin-bottom: 50px;">Authentication failed. Please try again.</p>
+            {% endif %}
+        </div>
+        
+        <!-- ATM Corner Options -->
+        {% if ask_pin %}
+            {% for acc in accounts %}
+                {% if loop.index == 1 %}
+                    <a href="{{ url_for('enter_pin', mobile=mobile, bank=acc.bank_name) }}" 
+                       class="atm-option bank-option top-left">
+                        {{ acc.bank_name }}
+                        <br><small>{{ acc.account_number }}</small>
+                    </a>
+                {% elif loop.index == 2 %}
+                    <a href="{{ url_for('enter_pin', mobile=mobile, bank=acc.bank_name) }}" 
+                       class="atm-option bank-option top-right">
+                        {{ acc.bank_name }}
+                        <br><small>{{ acc.account_number }}</small>
+                    </a>
+                {% elif loop.index == 3 %}
+                    <a href="{{ url_for('enter_pin', mobile=mobile, bank=acc.bank_name) }}" 
+                       class="atm-option bank-option bottom-left">
+                        {{ acc.bank_name }}
+                        <br><small>{{ acc.account_number }}</small>
+                    </a>
+                {% elif loop.index == 4 %}
+                    <a href="{{ url_for('enter_pin', mobile=mobile, bank=acc.bank_name) }}" 
+                       class="atm-option bank-option bottom-right">
+                        {{ acc.bank_name }}
+                        <br><small>{{ acc.account_number }}</small>
+                    </a>
+                {% elif loop.index == 5 %}
+                    <a href="{{ url_for('enter_pin', mobile=mobile, bank=acc.bank_name) }}" 
+                       class="atm-option bank-option left-center">
+                        {{ acc.bank_name }}
+                        <br><small>{{ acc.account_number }}</small>
+                    </a>
+                {% elif loop.index == 6 %}
+                    <a href="{{ url_for('enter_pin', mobile=mobile, bank=acc.bank_name) }}" 
+                       class="atm-option bank-option right-center">
+                        {{ acc.bank_name }}
+                        <br><small>{{ acc.account_number }}</small>
+                    </a>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <a href="/" class="atm-option retry-option bottom-center">
+                RETRY
+            </a>
+        {% endif %}
+    </div>
+</div>
+            {%else%}
+            <h2 class="fail">{{fail}}</h2>
+            <a href="/">Retry..</a>
+            {% endif %}
+        </div>
+    </div>
+    </div>
+    
+</body>
+</html>

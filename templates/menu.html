@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Men</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+</head>
+<body>
+    <style>
+.user-info {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #34495e;
+}
+
+.user-avatar {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    border-radius: 50%;
+    margin: 0 auto 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: white;
+}
+
+.user-info h3 {
+    color: #ecf0f1;
+    margin-bottom: 5px;
+}
+
+.user-info p {
+    color: #95a5a6;
+    font-size: 14px;
+}
+
+.menu-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.menu-btn {
+    background: #34495e;
+    color: white;
+    border: none;
+    padding: 20px 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    min-height: 80px;
+    text-decoration:none;
+}
+
+.menu-btn:hover {
+    background: #3498db;
+    transform: translateY(-2px);
+}
+
+.btn-icon {
+    font-size: 24px;
+}
+
+.exit-btn {
+    background: #e74c3c;
+    grid-column: span 2;
+}
+
+.exit-btn:hover {
+    background: #c0392b;
+}
+.pin-invalid{
+    color:red;
+    text-align:center;
+    margin-top:15%;
+}
+.top-header{
+    text-align:center;
+    color: #3498db;
+    margin-bottom:10px;
+}
+.balance-btn{
+    background-color: #34495e;
+    width:100%;
+    border:none;
+    height:100%;
+    color:white;
+    cursor: pointer;
+}
+.balance-btn:hover{
+    background: #3498db;
+    transform: translateY(-2px);
+    
+}
+.user-img{
+    object-fit:cover;
+    border-radius:50%;
+}
+
+    </style>
+            <div class="atm-container">
+                <div class="atm-screen">
+                    <!-- Main Menu Screen -->
+                     <h2 class="top-header">Facial Biometric Authentication</h2>
+                     {%if user%}
+                <div class="screen menu-screen" id="menuScreen">
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            <img src="{{url_for('static',filename=face)}}" width="60" class="user-img">
+                        </div>
+                        <h3>Welcome {{name}}</h3>
+                        <p>Account: {{account}}</p>
+                    </div>
+                    <div class="menu-options">
+                        <form method="POST" action="/balance" class="menu-btn">
+                            <input type="hidden" name="mobile" value="{{mobile}}">
+                            <input type="hidden" name="bank_name" value="{{bank_name}}">
+                            <button class="balance-btn" type="submit" >
+                                <span class="btn-icon">💰</span>
+                                Balance Inquiry
+                            </button>
+                        </form>
+                        <form method="GET" action="/withdraw" class="menu-btn">
+                            <input type="hidden" name="mobile" value="{{mobile}}">
+                            <input type="hidden" name="bank_name" value="{{bank_name}}">
+                            <button class="balance-btn" type="submit" >
+                                <span class="btn-icon">💸</span>
+                                Cash Withdrawal
+                            </button>
+                        </form>
+                        <form method="GET" action="/deposit" class="menu-btn">
+                            <input type="hidden" name="mobile" value="{{mobile}}">
+                            <input type="hidden" name="bank_name" value="{{bank_name}}">
+                            <button class="balance-btn" data-action="deposit" type="submit">
+                                <span class="btn-icon">💳</span>
+                                Cash Deposit
+                            </button>
+                        </form>
+                        
+                        <form method="GET" action="/transfer" class="menu-btn"> 
+                            <button class="balance-btn" data-action="transfer">
+                                <span class="btn-icon">🔄</span>
+                                Transfer Funds
+                            </button> 
+                        </form>
+                        
+                        <button class="menu-btn" data-action="history">
+                            <span class="btn-icon">📊</span>
+                            Transaction History
+                        </button>
+                        <button class="menu-btn exit-btn" data-action="exit">
+                            <span class="btn-icon">🚪</span>
+                            Exit
+                        </button>
+                    </div>
+                </div>
+                {%else%}
+                <h2 class="pin-invalid">invalid pin try again</h2>
+                {%endif%}
+            </div>
+        </div>
+        <script>
+            <script>
+                // Auto-submit the form when the page loads
+                window.onload = function() {
+                    document.getElementById('balanceForm').submit();
+          };
+</script>
+        </script>
+</body>
+</html>

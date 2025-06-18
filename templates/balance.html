@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Balance</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <style>
+        body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.atm-container {
+    background: #2c3e50;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    padding: 30px;
+    /* max-width: 600px; */
+    width: 100%;
+}
+
+.atm-screen {
+    background: #1a1a1a;
+    border-radius: 15px;
+    padding: 0;
+    min-height: 500px;
+    border: 3px solid #34495e;
+    position: relative;
+    overflow: hidden;
+}
+h2{
+    color: #3498db;
+    text-align:center;
+}
+.withdraw-msg {
+    margin-top: 30%;
+    color:green;
+    font-size:25px;
+}
+</style>
+    <main>
+        <!-- Content goes here -->
+        <div class="atm-container">
+            <div class="atm-screen">
+                
+                <h2 class="top-header">Facial Biometric Authentication </h2>
+                {%if check=="inquery"%}
+                    <!-- Main Menu Screen -->
+                
+                <h2>Balance:{{balance}}</h2>
+                <a href='/'><button>Exit</button></a>
+                <!--amount withdraw form-->
+                {%elif check=="withdraw_amount"%}
+                <form method="POST" action="/withdraw">
+                    <label for="amount">Enter Amount to Withdraw:</label>
+                    <input type="number" name="amount" id="amount" required>
+                    <input type="hidden" name="mobile" value="{{mobile}}">
+                    <input type="hidden" name="bank_name" value="{{bank_name}}">
+                    
+                    <button type="submit">Withdraw</button>
+                </form>
+                <!--amount debited messsage-->
+                {%elif check=="debited_amount"%}
+                <h2 class="withdraw-msg">{{message}}</h2>
+
+                {%endif%}
+            </div>
+
+        </div>
+    </main>
+</body>
+</html>

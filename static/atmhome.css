@@ -1,0 +1,894 @@
+/* ATM System Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.atm-container {
+    background: #2c3e50;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    padding: 30px;
+    /* max-width: 600px; */
+    width: 100%;
+}
+
+.atm-screen {
+    background: #1a1a1a;
+    border-radius: 15px;
+    padding: 0;
+    min-height: 500px;
+    border: 3px solid #34495e;
+    position: relative;
+    overflow: hidden;
+}
+
+.screen-header {
+    background: linear-gradient(90deg, #3498db, #2980b9);
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+.bank-logo h2 {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.datetime {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.screen-content {
+    padding: 30px;
+    color: white;
+    min-height: 400px;
+}
+
+.screen {
+    display: none;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.screen.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Welcome Screen Styles */
+.welcome-content {
+    text-align: center;
+}
+
+.welcome-content h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+    color: #3498db;
+}
+
+.welcome-subtitle {
+    font-size: 14px;
+    color: #bdc3c7;
+    margin-bottom: 30px;
+}
+
+.mobile-input-section {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.mobile-input-section h3 {
+    margin-bottom: 20px;
+    color: #ecf0f1;
+}
+
+.input-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.mobile-input {
+    flex: 1;
+    padding: 15px;
+    border: 2px solid #34495e;
+    border-radius: 8px;
+    background: #2c3e50;
+    color: white;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.mobile-input:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+.mobile-input::placeholder {
+    color: #7f8c8d;
+}
+
+.proceed-btn {
+    padding: 15px 25px;
+    background: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.proceed-btn:hover:not(:disabled) {
+    background: #219a52;
+    transform: translateY(-2px);
+}
+
+.proceed-btn:disabled {
+    background: #7f8c8d;
+    cursor: not-allowed;
+}
+
+.input-help {
+    color: #95a5a6;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* Biometric Screen Styles */
+.biometric-content {
+    text-align: center;
+}
+
+.biometric-content h2 {
+    color: #3498db;
+    margin-bottom: 10px;
+}
+
+.mobile-display {
+    color: #ecf0f1;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.mobile-display span {
+    color: #3498db;
+    font-weight: bold;
+}
+
+.biometric-scanner {
+    margin-top: 20px;
+}
+
+.scanner-frame {
+    width: 250px;
+    height: 300px;
+    margin: 0 auto 20px;
+    border: 3px solid #3498db;
+    border-radius: 15px;
+    position: relative;
+    overflow: hidden;
+    background: #000;
+}
+
+.camera-view {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+}
+
+.face-outline {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 150px;
+    height: 180px;
+    border: 2px solid #3498db;
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    opacity: 0.7;
+}
+
+.scanning-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #3498db, transparent);
+    animation: scanning 2s linear infinite;
+    opacity: 0;
+}
+
+.scanning-line.active {
+    opacity: 1;
+}
+
+@keyframes scanning {
+    0% { top: 0; }
+    100% { top: 100%; }
+}
+
+.scanner-text {
+    color: #ecf0f1;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.scan-btn {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s;
+    margin-bottom: 15px;
+}
+
+.scan-btn:hover {
+    background: #c0392b;
+    transform: translateY(-2px);
+}
+
+.back-btn-mobile {
+    background: #95a5a6;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.back-btn-mobile:hover {
+    background: #7f8c8d;
+}
+
+/* Authentication Screen Styles */
+.auth-content {
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #34495e;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.auth-content h2 {
+    color: #3498db;
+    margin-bottom: 15px;
+}
+
+.auth-content p {
+    color: #bdc3c7;
+    margin-bottom: 30px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #34495e;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 20px 0;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #3498db, #2980b9);
+    width: 0%;
+    transition: width 0.3s ease;
+    border-radius: 4px;
+}
+
+/* Menu Screen Styles */
+.user-info {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #34495e;
+}
+
+.user-avatar {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    border-radius: 50%;
+    margin: 0 auto 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: white;
+}
+
+.user-info h3 {
+    color: #ecf0f1;
+    margin-bottom: 5px;
+}
+
+.user-info p {
+    color: #95a5a6;
+    font-size: 14px;
+}
+
+.menu-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.menu-btn {
+    background: #34495e;
+    color: white;
+    border: none;
+    padding: 20px 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    min-height: 80px;
+}
+
+.menu-btn:hover {
+    background: #3498db;
+    transform: translateY(-2px);
+}
+
+.btn-icon {
+    font-size: 24px;
+}
+
+.exit-btn {
+    background: #e74c3c;
+    grid-column: span 2;
+}
+
+.exit-btn:hover {
+    background: #c0392b;
+}
+
+/* Transaction Screen Styles */
+.transaction-screen h2 {
+    color: #3498db;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.balance-info {
+    text-align: center;
+}
+
+.balance-card {
+    background: #34495e;
+    padding: 30px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.balance-card h3 {
+    color: #ecf0f1;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+
+.balance-amount {
+    font-size: 36px;
+    color: #27ae60;
+    font-weight: bold;
+}
+
+.account-details {
+    color: #95a5a6;
+    font-size: 14px;
+}
+
+.account-details p {
+    margin-bottom: 5px;
+}
+
+.back-btn {
+    background: #95a5a6;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s;
+    margin-top: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.back-btn:hover {
+    background: #7f8c8d;
+    transform: translateY(-2px);
+}
+
+/* ATM Hardware Styles */
+.atm-hardware {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.card-slot, .cash-dispenser, .receipt-printer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: #ecf0f1;
+    font-size: 12px;
+}
+
+.slot-indicator {
+    width: 60px;
+    height: 8px;
+    background: #34495e;
+    border-radius: 4px;
+    border: 1px solid #2c3e50;
+}
+
+.dispenser-flap {
+    width: 80px;
+    height: 12px;
+    background: #27ae60;
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+}
+
+.dispenser-flap::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+.printer-slot {
+    width: 50px;
+    height: 6px;
+    background: #95a5a6;
+    border-radius: 3px;
+    border: 1px solid #7f8c8d;
+}
+
+/* Success Screen Styles */
+.success-content {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.success-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+}
+
+.success-message {
+    color: #27ae60;
+    font-size: 18px;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.success-note {
+    color: #95a5a6;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+.continue-btn {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.continue-btn:hover {
+    background: #219a52;
+    transform: translateY(-2px);
+}
+
+/* Processing Screen Styles */
+.processing-content {
+    text-align: center;
+    padding: 50px 20px;
+}
+
+.processing-content h3 {
+    color: #3498db;
+    margin-bottom: 15px;
+}
+
+.processing-content p {
+    color: #bdc3c7;
+}
+
+/* Exit Screen Styles */
+.exit-content {
+    text-align: center;
+    padding: 40px 20px;
+}
+
+.exit-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+}
+
+.exit-content h3 {
+    color: #27ae60;
+    margin-bottom: 15px;
+}
+
+.exit-content p {
+    color: #ecf0f1;
+    margin-bottom: 10px;
+}
+
+.exit-note {
+    color: #95a5a6;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+.exit-timer {
+    background: #34495e;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.exit-timer span {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+.restart-btn {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.restart-btn:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+}
+
+/* Transaction Form Styles */
+.amount-selection {
+    text-align: center;
+}
+
+.amount-selection h3 {
+    color: #ecf0f1;
+    margin-bottom: 20px;
+}
+
+.amount-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.amount-btn {
+    background: #34495e;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.amount-btn:hover {
+    background: #3498db;
+    transform: translateY(-2px);
+}
+
+.custom-amount {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.custom-amount input {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #34495e;
+    border-radius: 6px;
+    background: #2c3e50;
+    color: white;
+    font-size: 16px;
+}
+
+.custom-amount input:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+.balance-display {
+    color: #27ae60;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/* Deposit Screen Styles */
+.deposit-section {
+    text-align: center;
+}
+
+.deposit-section h3 {
+    color: #ecf0f1;
+    margin-bottom: 20px;
+}
+
+.deposit-slot {
+    background: #34495e;
+    padding: 30px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    border: 2px dashed #3498db;
+}
+
+.slot-animation {
+    font-size: 48px;
+    margin-bottom: 15px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.deposit-status {
+    margin-top: 20px;
+}
+
+.deposit-status p {
+    color: #ecf0f1;
+    margin-bottom: 15px;
+}
+
+.deposit-status span {
+    color: #3498db;
+    font-weight: bold;
+}
+
+.deposit-btn {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.deposit-btn:hover:not(:disabled) {
+    background: #219a52;
+    transform: translateY(-2px);
+}
+
+.deposit-btn:disabled {
+    background: #7f8c8d;
+    cursor: not-allowed;
+}
+
+/* Transfer Form Styles */
+.transfer-form {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    color: #ecf0f1;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #34495e;
+    border-radius: 6px;
+    background: #2c3e50;
+    color: white;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+.form-group input::placeholder {
+    color: #7f8c8d;
+}
+
+/* Transaction History Styles */
+.transaction-history {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.history-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.history-header h3 {
+    color: #ecf0f1;
+    margin-bottom: 5px;
+}
+
+.history-header p {
+    color: #95a5a6;
+    font-size: 14px;
+}
+
+.transaction-list {
+    background: #34495e;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.transaction-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 10px;
+    padding: 15px;
+    border-bottom: 1px solid #2c3e50;
+    font-size: 14px;
+    align-items: center;
+}
+
+.transaction-item:last-child {
+    border-bottom: none;
+}
+
+.transaction-item.credit {
+    border-left: 4px solid #27ae60;
+}
+
+.transaction-item.debit {
+    border-left: 4px solid #e74c3c;
+}
+
+.tx-date {
+    color: #95a5a6;
+}
+
+.tx-type {
+    color: #ecf0f1;
+    font-weight: bold;
+}
+
+.tx-amount {
+    font-weight: bold;
+}
+
+.credit .tx-amount {
+    color: #27ae60;
+}
+
+.debit .tx-amount {
+    color: #e74c3c;
+}
+
+.tx-balance {
+    color: #3498db;
+    font-size: 12px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .atm-container {
+        padding: 20px;
+    }
+    
+    .menu-options {
+        grid-template-columns: 1fr;
+    }
+    
+    .exit-btn {
+        grid-column: span 1;
+    }
+    
+    .scanner-frame {
+        width: 200px;
+        height: 240px;
+    }
+    
+    .face-outline {
+        width: 120px;
+        height: 144px;
+    }
+    
+    .amount-buttons {
+        grid-template-columns: 1fr;
+    }
+    
+    .custom-amount {
+        flex-direction: column;
+    }
+    
+    .transaction-item {
+        grid-template-columns: 1fr;
+        gap: 5px;
+        text-align: center;
+    }
+    
+    .atm-hardware {
+        flex-direction: column;
+        gap: 15px;
+    }
+}

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Enter PIN</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+        body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    text-align:center;
+}
+
+.atm-container {
+    background: #2c3e50;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    padding: 30px;
+    /* max-width: 600px; */
+    width: 100%;
+}
+
+.atm-screen {
+    background: #1a1a1a;
+    border-radius: 15px;
+    padding: 0;
+    min-height: 500px;
+    border: 3px solid #34495e;
+    position: relative;
+    overflow: hidden;
+}
+.top-header{
+    color: #3498db;
+    text-align:center;
+    margin-bottom:20px;
+}
+/*#pin{
+    height:30px;
+    border-radius:5px;
+    border:1px solid black;
+    color:white;
+    background: rgba(210, 196, 196, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 16px 20px;
+    font-size: 16px;
+    color: #fff;
+    width: 50%;
+    transition: all 0.3s ease;
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}*/
+#pin{
+    background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ffff;
+            border-radius: 0;
+            padding: 16px 20px;
+            font-size: 16px;
+            color: #00ffff;
+            width: 50%;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 0 10px rgba(0, 255, 255, 0.3),
+                inset 0 0 10px rgba(0, 255, 255, 0.1);
+}
+.pin-label{
+    color:white;
+    font-size:20px;
+    margin-top:10px;
+}
+.bank-name{
+    color: #00ffff
+}
+.submit-btn{
+    border: none;
+  outline: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 16px;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  transition: all 0.3s ease;
+  border-radius: 6px;
+  padding: 12px 20px;
+  font-weight: 500;
+}
+.submit-btn:hover{
+    background-color: green;
+}
+</style>
+    <div class="atm-container">
+        <div class="atm-screen">
+        <div class="screen biometric-screen" id="biometricScreen">
+            <div class="biometric-content">
+                <h2 class="top-header">Facial Biometric Authentication</h2>
+                {%if check%}
+                <form method="POST" action="/menu">
+                <input type="hidden" name="mobile" value="{{ mobile }}">
+                <input type="hidden" name="bank" value="{{ bank }}">
+                <label for="pin" class="pin-label">Enter 4-digit PIN for <span class="bank-name">{{bank}}</span>  Account</label><br><br>
+                <input type="password" name="pin" id="pin" maxlength="4" required><br><br>
+                <button type="submit" class="submit-btn">Submit</button>
+                </form>
+                {%else%}
+                <form method="GET" action="/generate_pin">
+                    <input type="hidden" name="mobile" value="{{mobile}}">
+                    <input type="hidden" name="bank" value="{{bank}}">
+                    <button type="submit"> Generate PIN</button>
+             </div>
+             {%endif%}
+        </div>
+    </div>
+    </div> 
+</body>
+</html>

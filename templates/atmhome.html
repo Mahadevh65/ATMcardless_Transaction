@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureBank ATM - Facial Biometric Authentication</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='atmhome.css') }}">
+</head>
+<body>
+    <div class="atm-container">
+        <!-- ATM Screen -->
+        <div class="atm-screen">
+            <div class="screen-header">
+                <div class="bank-logo">
+                    <h2>SecureBank</h2>
+                </div>
+                <div class="datetime" id="datetime"></div>
+            </div>
+            
+            <div class="screen-content" id="screenContent">
+                <!-- Welcome Screen -->
+                <div class="screen welcome-screen active" id="welcomeScreen">
+                    <div class="welcome-content">
+                        <h1>Welcome to SecureBank ATM</h1>
+                        <p class="welcome-subtitle">Secure Banking with Facial Biometric Technology</p>
+                        <div class="mobile-input-section">
+                            <h3>Enter Your Mobile Number</h3>
+                            <div class="input-group">
+                                <input type="tel" 
+                                       id="mobileInput" 
+                                       placeholder="Enter 10-digit mobile number" 
+                                       maxlength="10" 
+                                       class="mobile-input">
+                                <button class="proceed-btn" id="proceedBtn" disabled>Proceed</button>
+                            </div>
+                            <p class="input-help">Please enter the mobile number registered with your account</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Biometric Screen -->
+                <div class="screen biometric-screen" id="biometricScreen">
+                    <div class="biometric-content">
+                        <h2>Facial Biometric Authentication</h2>
+                        <p class="mobile-display">Mobile: <span id="displayMobile"></span></p>
+                        <div class="biometric-scanner">
+                            <div class="scanner-frame">
+                                <div class="camera-view" id="cameraView">
+                                    <div class="face-outline"></div>
+                                    <div class="scanning-line" id="scanningLine"></div>
+                                </div>
+                            </div>
+                            <p class="scanner-text">Please position your face within the frame</p>
+                            <button class="scan-btn" id="scanBtn">Start Facial Recognition</button>
+                            <button class="back-btn-mobile" id="backToMobile">Change Mobile Number</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Authentication Screen -->
+                <div class="screen auth-screen" id="authScreen">
+                    <div class="auth-content">
+                        <div class="loading-spinner"></div>
+                        <h2>Authenticating...</h2>
+                        <p>Please remain still while we verify your identity</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Menu Screen -->
+                <div class="screen menu-screen" id="menuScreen">
+                    <div class="user-info">
+                        <div class="user-avatar"></div>
+                        <h3>Welcome, John Doe</h3>
+                        <p>Account: ****1234</p>
+                    </div>
+                    <div class="menu-options">
+                        <button class="menu-btn" data-action="balance">
+                            <span class="btn-icon">💰</span>
+                            Balance Inquiry
+                        </button>
+                        <button class="menu-btn" data-action="withdraw">
+                            <span class="btn-icon">💸</span>
+                            Cash Withdrawal
+                        </button>
+                        <button class="menu-btn" data-action="deposit">
+                            <span class="btn-icon">💳</span>
+                            Cash Deposit
+                        </button>
+                        <button class="menu-btn" data-action="transfer">
+                            <span class="btn-icon">🔄</span>
+                            Transfer Funds
+                        </button>
+                        <button class="menu-btn" data-action="history">
+                            <span class="btn-icon">📊</span>
+                            Transaction History
+                        </button>
+                        <button class="menu-btn exit-btn" data-action="exit">
+                            <span class="btn-icon">🚪</span>
+                            Exit
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Transaction Screens -->
+                <div class="screen transaction-screen" id="balanceScreen">
+                    <h2>Account Balance</h2>
+                    <div class="balance-info">
+                        <div class="balance-card">
+                            <h3>Available Balance</h3>
+                            <div class="balance-amount">$2,547.83</div>
+                        </div>
+                        <div class="account-details">
+                            <p>Account Number: ****1234</p>
+                            <p>Last Transaction: Dec 15, 2024</p>
+                        </div>
+                    </div>
+                    <button class="back-btn" data-back="menu">Back to Menu</button>
+                </div>
+
+                <!-- Withdraw Screen (dynamically generated) -->
+                <!-- Deposit Screen (dynamically generated) -->
+                <!-- Transfer Screen (dynamically generated) -->
+                <!-- History Screen (dynamically generated) -->
+            </div>
+        </div>
+
+        <!-- Physical ATM Elements -->
+        <div class="atm-hardware">
+            <div class="card-slot">
+                <div class="slot-indicator"></div>
+                <span>Card Slot</span>
+            </div>
+            <div class="cash-dispenser">
+                <div class="dispenser-flap"></div>
+                <span>Cash Dispenser</span>
+            </div>
+            <div class="receipt-printer">
+                <div class="printer-slot"></div>
+                <span>Receipt</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='atmhome.js') }}"></script>
+</body>
+</html>
