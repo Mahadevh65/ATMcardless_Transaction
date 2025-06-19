@@ -7,14 +7,16 @@
 </head>
 <body>
     <h1>Generate PIN</h1>
+    {%if check=="GET"%}
     <form method="POST" action="/generate_pin">
-        {% csrf_token %}
+        <input type="hidden" name="mobile" value="{{ mobile }}">
+        <input type="hidden" name="bank" value="{{ bank_name }}">
         <label for="pin_length">PIN Length:</label>
-        <input type="number" id="pin_length" name="pin_length" min="4" max="12" required>
+        <input type="number" id="pin_length" name="pin" required>
         <button type="submit">Generate</button>
     </form>
-    {% if pin %}
-        <p>Your generated PIN: <strong>{{ pin }}</strong></p>
-    {% endif %}
+    {%elif check=="POST"%}
+    <h2>generated pin {{pin}}</h2>
+    {%endif%}
 </body>
 </html>

@@ -44,6 +44,41 @@ h2{
     color:green;
     font-size:25px;
 }
+.amount-lable{
+    color:white;
+    font-size:20px;
+    margin-left:50px;
+}
+#amount {
+    height: 30px;
+    border-radius:5px;
+    width:80%;
+    margin-left:20px;
+}
+.withdraw-btn{
+    margin-left: 30%;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 18px;
+
+}
+.withdraw-btn:hover{
+    background-color: green;
+    cursor:pointer;
+}
+.balance-show{
+    margin-top:40%;
+}
+.balance-btn {
+    margin-left: 40%;
+    border-radius: 20px;
+    padding: 10px 20px;
+    font-size: 18px;
+}
+.balance-btn:hover{
+    background-color: red;
+    cursor:pointer;
+}
 </style>
     <main>
         <!-- Content goes here -->
@@ -54,22 +89,34 @@ h2{
                 {%if check=="inquery"%}
                     <!-- Main Menu Screen -->
                 
-                <h2>Balance:{{balance}}</h2>
-                <a href='/'><button>Exit</button></a>
+                <h2 class="balance-show">Balance:{{balance}}</h2>
+                <a href='/'><button class="balance-btn">Exit</button></a>
                 <!--amount withdraw form-->
                 {%elif check=="withdraw_amount"%}
                 <form method="POST" action="/withdraw">
-                    <label for="amount">Enter Amount to Withdraw:</label>
+                    <label for="amount" class="amount-lable">Enter Amount to Withdraw</label><br><br>
                     <input type="number" name="amount" id="amount" required>
                     <input type="hidden" name="mobile" value="{{mobile}}">
-                    <input type="hidden" name="bank_name" value="{{bank_name}}">
-                    
-                    <button type="submit">Withdraw</button>
+                    <input type="hidden" name="bank_name" value="{{bank_name}}"><br><br>
+                    <button type="submit" class="withdraw-btn">Withdraw</button>
                 </form>
                 <!--amount debited messsage-->
                 {%elif check=="debited_amount"%}
                 <h2 class="withdraw-msg">{{message}}</h2>
 
+                <!--amount deposite-->
+                {%elif check=="deposite_amount"%}
+                <h2 class="withdraw-msg">{{message}}</h2>
+
+                <!--Transfer Amount-->
+                {%elif check=="GET_transfer"%}
+                <form method="POST" action="/transfer">
+                    <label for="mobile" class="amount-label">Enter Mobile Number To Transfer</label><br><br>
+                    <input type="number" name="mobile_input" id="mobile" required>
+                    <input type="hidden" name="mobile" value="{{mobile}}">
+                    <input type="hidden" name="bank_name" value="{{bank_name}}"><br><br>
+                    <button type="submit"> submit</button>
+                </form>
                 {%endif%}
             </div>
 

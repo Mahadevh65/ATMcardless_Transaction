@@ -100,7 +100,6 @@ def authenticate(known_face_path):
         if authenticated:
           return True
 
-    # Press 'q' to quit manually
         if time.time() - start_time > 10:
             return False
             # break
@@ -161,20 +160,21 @@ def generate_pin():
     if request.method == 'GET':
         mobile=request.args.get('mobile')
         bank_name=request.args.get('bank')
-        return render_template("generate_pin.html", mobile=mobile, bank_name=bank_name)
+        return render_template("generate_pin.html", mobile=mobile, bank_name=bank_name ,check="GET")
     else:
         mobile=request.form.get('mobile')
-        bank_name=request.form.get('bank_name')
+        bank_name=request.form.get('bank')
         pin = request.form.get('pin')
-        
+        print("mobile:",mobile)
+        print("bank:",bank_name)
         if not pin.isdigit() or len(pin) != 4:
             return "please enter a valid 4-digit PIN."
         
         cursor.execute("UPDATE account SET pin = %s WHERE phone= %s AND bank_name =%s", (pin,mobile,bank_name))
         db.commit()
+        print("pin updated:",pin)
+        return render_template("generate_pin.html", mobile=mobile, bank_name=bank_name, check="POST",pin=pin)
         
-
-
 @app.route('/menu', methods=['POST'])
 def atmmenu():
     mobile = request.form.get('mobile','').strip()
@@ -249,9 +249,11 @@ def withdraw():
             db.commit()
             cursor.execute("SELECT RIGHT(account_number , 4) AS four_digit FROM account WHERE bank_name = %s AND phone =%s",(bank_name , mobile))
             last_four_digits=cursor.fetchone()
+            cursor.execute("SELECT * From user WHERE phone = %s", (mobile,))
+            user=cursor.fetchone()
             print("last four digits:" , last_four_digits)
             send_email_alert(
-                to_email='nagendrahulsure9@gmail.com',
+                to_email=user['email'],
                 subject="Transaction Alert",
                 body=f"Dear customer, amount  {amount} debited from  your Acc No. XXXXXX{last_four_digits['four_digit']} on {current_time} Avl. Balance: {account['amount']} "
             ) 
@@ -260,11 +262,24 @@ def withdraw():
 
 @app.route('/deposit')
 def deposit():
-    return "Deposit page coming soon"
+    message= "Please insert cash into the Machine"
+    return render_template("balance.html", message=message , check="deposite_amount")
 
-@app.route('/transfer')
+@app.route('/transfer',methods=['GET', 'POST'])
 def transfer():
-    return "Transfer page coming soon"
+    if request.method == 'GET':
+        mobile = request.args.get('mobile')
+        bank_name = request.args.get('bank_name')
+        return render_template("balance.html", check="GET_transfer", mobile=mobile,bank_name=bank_name)
+    else:
+        mobile = request.form.get('mobile_input')
+        cursor.execute("SELECT bank_name FROM account WHERE phone = %s", (mobile,))
+        user=cursor.fetchone()
+        if not user:
+            return "mobile number is not registerd"
+        print("account:",user)
+        
+        return "Transfer page coming soon"
 
 @app.route('/history')
 def history():
