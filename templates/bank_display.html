@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bank Display</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <style>
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    margin: 0;
+}
+
+.atm-container {
+    background: #2c3e50;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    padding: 30px;
+    width: 100%;
+    max-width: 600px;
+}
+
+.atm-screen {
+    background: #1a1a1a;
+    border-radius: 15px;
+    padding: 30px;
+    min-height: 500px;
+    border: 3px solid #34495e;
+    position: relative;
+    overflow: hidden;
+    color: #00ff41;
+    font-family: 'Courier New', monospace;
+}
+
+.atm-screen p {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 30px;
+    color: #00ff41;
+    text-shadow: 0 0 10px rgba(0, 255, 65, 0.5);
+}
+.atm-screen label {
+    font-size: 18px;
+    font-weight: bold;
+    color: #00ff41;
+    display: block;
+    margin-bottom: 10px;
+}
+
+#amount {
+    width: 100%;
+    padding: 15px;
+    font-size: 18px;
+    border: 2px solid #00ff41;
+    border-radius: 8px;
+    background: #000;
+    color: #00ff41;
+    font-family: 'Courier New', monospace;
+    margin-bottom: 30px;
+    box-sizing: border-box;
+}
+
+#amount:focus {
+    outline: none;
+    border-color: #00ff41;
+    box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
+}
+
+#amount::placeholder {
+    color: #006600;
+}
+
+.bank-button {
+    width: 100%;
+    padding: 15px 20px;
+    margin: 10px 0;
+    font-size: 18px;
+    font-weight: bold;
+    background: linear-gradient(45deg, #27ae60, #2ecc71);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+}
+
+.bank-button:hover {
+    background: linear-gradient(45deg, #2ecc71, #27ae60);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+}
+
+.bank-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(46, 204, 113, 0.3);
+}
+
+form {
+    margin: 0;
+    padding: 0;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .atm-container {
+        padding: 20px;
+        margin: 10px;
+    }
+    
+    .atm-screen {
+        padding: 20px;
+        min-height: 400px;
+    }
+    
+    .atm-screen p {
+        font-size: 20px;
+    }
+    
+    .bank-button {
+        font-size: 16px;
+        padding: 12px 15px;
+    }
+    
+    #amount {
+        font-size: 16px;
+        padding: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+    
+    .atm-screen p {
+        font-size: 18px;
+    }
+    
+    .bank-button {
+        font-size: 14px;
+        padding: 10px 12px;
+    }
+}
+    </style>
+    <main>
+        <div class="atm-container">
+            <div class="atm-screen">
+                <p>Enter Amount And Select a bank </p>
+                <label for="amount">Enter Amount:</label><br><br>
+                <form action="{{url_for('transfer')}}" method="POST">
+                    <input type="hidden" name="reciver_bank_name" id="bank_name">
+                    <input type="hidden" name="sender_bank_name" id="bank_name" value="{{sender_bank_name}}">
+                    <input type="hidden" name="reciver_mobile"  value="{{reciver_mobile}}">
+                    <input type="hidden" name="sender_mobile"  value="{{sender_mobile}}">
+                    <input type="text" name="amount" id="amount" required>
+                    {% for bank in banks %}
+                    <button type="submit" class="bank-button" onclick=SetBank('{{bank.bank_name}}')>{{bank.bank_name}}</button>
+                    {% endfor %}
+                </form>
+            </div>
+        </div>
+    </main>
+    <script>
+        function SetBank(bankName) {
+            document.getElementById("bank_name").value = bankName;
+        }
+    </script>
+</body>
+</html>

@@ -1,184 +1,448 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Men</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+    <title>Facial Biometric Authentication</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #5a67d8 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background particles */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.1) 0%, transparent 50%);
+            animation: backgroundShift 20s ease-in-out infinite alternate;
+            z-index: -1;
+        }
+
+        @keyframes backgroundShift {
+            0% { transform: scale(1) rotate(0deg); opacity: 0.7; }
+            100% { transform: scale(1.1) rotate(1deg); opacity: 1; }
+        }
+
+        .main-container {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 50px 40px;
+            box-shadow: 
+                0 25px 50px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            max-width: 900px;
+            width: 100%;
+            /*animation: slideUp 0.8s ease-out;*/
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .auth-panel {
+            background: linear-gradient(145deg, #1a1a1a, #2d2d2d);
+            border-radius: 20px;
+            padding: 40px;
+            color: white;
+            box-shadow: 
+                inset 0 4px 16px rgba(0, 0, 0, 0.4),
+                0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(74, 158, 255, 0.5), transparent);
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .title {
+            color: #4a9eff;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #4a9eff, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(74, 158, 255, 0.3);
+        }
+
+        .profile-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 30px 0;
+            /*animation: fadeIn 1s ease-out 0.3s both;*/
+        }
+
+        .profile-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid #4a9eff;
+            box-shadow: 0 0 30px rgba(74, 158, 255, 0.4);
+            margin-bottom: 15px;
+            /*animation: pulse 2s ease-in-out infinite alternate;*/
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 30px rgba(74, 158, 255, 0.4); }
+            100% { box-shadow: 0 0 40px rgba(74, 158, 255, 0.8); }
+        }
+
+        .welcome-text {
+            font-size: 22px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 5px;
+        }
+
+        .account-info {
+            color: #9ca3af;
+            font-size: 14px;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .action-button {
+            background: linear-gradient(135deg, #4a5568, #2d3748);
+            border: none;
+            border-radius: 15px;
+            padding: 20px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .action-button:hover::before {
+            left: 100%;
+        }
+
+        .action-button:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            border-color: rgba(74, 158, 255, 0.3);
+        }
+
+        .action-button:active {
+            transform: translateY(-1px) scale(1.01);
+        }
+
+        .action-button.balance {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
+        }
+
+        .action-button.balance:hover {
+            box-shadow: 0 8px 30px rgba(245, 158, 11, 0.4);
+        }
+
+        .action-button.withdrawal {
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .action-button.withdrawal:hover {
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.4);
+        }
+
+        .action-button.deposit {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .action-button.deposit:hover {
+            box-shadow: 0 8px 30px rgba(59, 130, 246, 0.4);
+        }
+
+        .action-button.transfer {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+        }
+
+        .action-button.transfer:hover {
+            box-shadow: 0 8px 30px rgba(139, 92, 246, 0.4);
+        }
+
+        .transaction-history {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #374151, #4b5563);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .transaction-history:hover {
+            box-shadow: 0 8px 30px rgba(75, 85, 99, 0.4);
+        }
+
+        .action-icon {
+            width: 24px;
+            height: 24px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        .exit-button {
+            width: 100%;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            border: none;
+            border-radius: 15px;
+            padding: 18px;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-top: 30px;
+            box-shadow: 0 4px 20px rgba(239, 68, 68, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .exit-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .exit-button:hover::before {
+            left: 100%;
+        }
+
+        .exit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(239, 68, 68, 0.4);
+        }
+
+        .exit-button:active {
+            transform: translateY(0);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .action-button {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .action-button:nth-child(1) { animation-delay: 0.1s; }
+        .action-button:nth-child(2) { animation-delay: 0.2s; }
+        .action-button:nth-child(3) { animation-delay: 0.3s; }
+        .action-button:nth-child(4) { animation-delay: 0.4s; }
+        .action-button:nth-child(5) { animation-delay: 0.5s; }
+
+        .exit-button {
+            animation: fadeIn 0.6s ease-out 0.6s both;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+
+            .auth-panel {
+                padding: 25px;
+            }
+
+            .title {
+                font-size: 24px;
+            }
+
+            .action-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .action-button {
+                padding: 18px;
+                font-size: 15px;
+            }
+
+            .profile-image {
+                width: 70px;
+                height: 70px;
+            }
+
+            .welcome-text {
+                font-size: 20px;
+            }
+        }
+
+        /* Improved accessibility */
+        .action-button:focus,
+        .exit-button:focus {
+            outline: 2px solid #4a9eff;
+            outline-offset: 2px;
+        }
+
+        /* Loading animation for buttons */
+        .action-button.loading {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .action-button.loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
-    <style>
-.user-info {
-    text-align: center;
-    margin-bottom: 30px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #34495e;
-}
-
-.user-avatar {
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(135deg, #3498db, #2980b9);
-    border-radius: 50%;
-    margin: 0 auto 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    color: white;
-}
-
-.user-info h3 {
-    color: #ecf0f1;
-    margin-bottom: 5px;
-}
-
-.user-info p {
-    color: #95a5a6;
-    font-size: 14px;
-}
-
-.menu-options {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-}
-
-.menu-btn {
-    background: #34495e;
-    color: white;
-    border: none;
-    padding: 20px 15px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: all 0.3s;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    min-height: 80px;
-    text-decoration:none;
-    width:80%;
-    margin-left:10%;
-}
-
-.menu-btn:hover {
-    background: #3498db;
-    transform: translateY(-2px);
-}
-
-.btn-icon {
-    font-size: 24px;
-}
-
-.exit-btn {
-    background: #e74c3c;
-    grid-column: span 2;
-    margin-bottom:10px;
-}
-
-.exit-btn:hover {
-    background: #c0392b;
-}
-.pin-invalid{
-    color:red;
-    text-align:center;
-    margin-top:15%;
-}
-.top-header{
-    text-align:center;
-    color: #3498db;
-    margin-bottom:10px;
-}
-.balance-btn{
-    background-color: #34495e;
-    width:100%;
-    border:none;
-    height:100%;
-    color:white;
-    cursor: pointer;
-    font-size:20px;
-}
-.balance-btn:hover{
-    background: #3498db;
-    transform: translateY(-2px);
-    
-}
-.user-img{
-    object-fit:cover;
-    border-radius:50%;
-}
-
-    </style>
-            <div class="atm-container">
-                <div class="atm-screen">
-                    <!-- Main Menu Screen -->
-                     <h2 class="top-header">Facial Biometric Authentication</h2>
-                     {%if user%}
-                <div class="screen menu-screen" id="menuScreen">
-                    <div class="user-info">
-                        <div class="user-avatar">
-                            <img src="{{url_for('static',filename=face)}}" width="60" class="user-img">
-                        </div>
-                        <h3>Welcome {{name}}</h3>
-                        <p>Account: {{account}}</p>
-                    </div>
-                    <div class="menu-options">
-                        <form method="POST" action="/balance" class="menu-btn">
-                            <input type="hidden" name="mobile" value="{{mobile}}">
-                            <input type="hidden" name="bank_name" value="{{bank_name}}">
-                            <button class="balance-btn" type="submit" >
-                                <span class="btn-icon">💰</span>
-                                Balance Inquiry
-                            </button>
-                        </form>
-                        <form method="GET" action="/withdraw" class="menu-btn">
-                            <input type="hidden" name="mobile" value="{{mobile}}">
-                            <input type="hidden" name="bank_name" value="{{bank_name}}">
-                            <button class="balance-btn" type="submit" >
-                                <span class="btn-icon">💸</span>
-                                Cash Withdrawal
-                            </button>
-                        </form>
-                        <form method="GET" action="/deposit" class="menu-btn">
-                            <input type="hidden" name="mobile" value="{{mobile}}">
-                            <input type="hidden" name="bank_name" value="{{bank_name}}">
-                            <button class="balance-btn" data-action="deposit" type="submit">
-                                <span class="btn-icon">💳</span>
-                                Cash Deposit
-                            </button>
-                        </form>
-                        
-                        <form method="GET" action="/transfer" class="menu-btn"> 
-                            <button class="balance-btn" data-action="transfer">
-                                <span class="btn-icon">🔄</span>
-                                Transfer Funds
-                            </button> 
-                        </form>
-                        
-                        <button class="menu-btn" data-action="history">
-                            <span class="btn-icon">📊</span>
-                            Transaction History
-                        </button>
-                        <button class="menu-btn exit-btn" data-action="exit">
-                            <span class="btn-icon">🚪</span>
-                            Exit
-                        </button>
-                    </div>
-                </div>
-                {%else%}
-                <h2 class="pin-invalid">invalid pin try again</h2>
-                {%endif%}
+    <div class="main-container">
+        <div class="auth-panel">
+            <div class="header-section">
+                <h1 class="title">Facial Biometric Authentication</h1>
             </div>
+            
+            <div class="profile-section">
+                <img src="{{url_for('static', filename=face)}}" alt="User Profile" class="profile-image">
+                <div class="welcome-text">Welcome {{name}}</div>
+                <div class="account-info">Account: {{account}}</div>
+            </div>
+
+            <div class="action-grid">
+                <button class="action-button balance" data-action="balance">
+                    Balance Inquiry
+                </button>
+
+                <button class="action-button withdrawal" data-action="withdraw">
+                    
+                    Cash Withdrawal
+                </button>
+
+                <button class="action-button deposit" data-action="deposit">
+                    Cash Deposit
+                </button>
+
+                <button class="action-button transfer" data-action="transfer">
+                    Transfer Funds
+                </button>
+
+                <button class="action-button transaction-history" data-action="history">
+                    Transaction History
+                </button>
+            </div>
+
+            <button class="exit-button">
+                Exit
+            </button>
         </div>
-        
+    </div>
             <script>
                 // Auto-submit the form when the page loads
-                window.onload = function() {
-                    document.getElementById('balanceForm').submit();
-             };
-           </script>
+            //    window.onload = function() {
+              //      document.getElementById('balanceForm').submit();
+             //};
+                const mobile = "{{ mobile }}";
+                const bankName = "{{ bank_name }}";
+
+    // Attach listener to all buttons with data-action
+                document.querySelectorAll('.action-button').forEach(button => {
+                button.addEventListener('click', function () {
+                const action = this.getAttribute('data-action');
+                if (!action) return;
+
+            // Build URL with parameters
+                const url = `/${action}?mobile=${encodeURIComponent(mobile)}&bank_name=${encodeURIComponent(bankName)}`;
+            
+            // Redirect to the route
+            window.location.href = url;
+        });
+    });
+    exit_btn=document.getElementsByClassName("exit-button")[0];
+    exit_btn.addEventListener('click',function(){
+        window.location.href="/";
+    })
+    </script>
         
 </body>
 </html>

@@ -10,20 +10,9 @@ import pymysql
 import smtplib
 from email.message import EmailMessage
 from datetime import datetime
-# Initialize webcam
-# video_capture = cv2.VideoCapture(0)
 
-  # or cv2.CAP_MSMF
 
 app=Flask(__name__)
-#database connection
-# db = mysql.connector.connect(
-#     host="localhost",
-#     user="root",
-#     password="Mahadev@2004",  # Replace with your MySQL password
-#     database="atmdata"
-# )
-# cursor = db.cursor(dictionary=True)
 
 db = pymysql.connect(
     host="localhost",
@@ -200,10 +189,10 @@ def atmmenu():
     
 
 # transactions route 
-@app.route('/balance',methods=['POST'])
+@app.route('/balance',methods=['GET'])
 def balance():
-    mobile= request.form.get('mobile')
-    bank_name= request.form.get('bank_name')
+    mobile= request.args.get('mobile')
+    bank_name= request.args.get('bank_name')
     print("bank_name in balance route:",bank_name)
     #print("mobile:",mobile)
     cursor.execute("SELECT * FROM user WHERE phone = %s", (mobile,))
@@ -247,11 +236,16 @@ def withdraw():
         else:
             cursor.execute("UPDATE account SET amount =amount - %s WHERE bank_name = %s AND phone= %s",(amount, bank_name, mobile))
             db.commit()
+            
             cursor.execute("SELECT RIGHT(account_number , 4) AS four_digit FROM account WHERE bank_name = %s AND phone =%s",(bank_name , mobile))
             last_four_digits=cursor.fetchone()
+            
             cursor.execute("SELECT * From user WHERE phone = %s", (mobile,))
             user=cursor.fetchone()
-            print("last four digits:" , last_four_digits)
+            # print("last four digits:" , last_four_digits)
+            if cursor.rowcount>0:
+                cursor.execute("INSERT INTO transactions(phone,bank_name,amount,type) VALUES (%s, %s, %s,%s)",(mobile,bank_name,amount,"Debited"))
+                db.commit()
             send_email_alert(
                 to_email=user['email'],
                 subject="Transaction Alert",
@@ -265,29 +259,85 @@ def deposit():
     message= "Please insert cash into the Machine"
     return render_template("balance.html", message=message , check="deposite_amount")
 
+@app.route('/bank_display', methods=['GET','POST'])
+def bank_display():
+    reciver_mobile = request.form.get('reciver_mobile')
+    sender_mobile = request.form.get('sender_mobile')
+    sender_bank_name = request.form.get('sender_bank_name')
+    # print("sender_mobile:",sender_mobile)
+    # print("reciver_mobile:",reciver_mobile)
+    cursor.execute("SELECT bank_name FROM account WHERE phone =%s", (reciver_mobile,))
+    banks=cursor.fetchall()
+    if not banks:
+        return "invaild no."
+    return render_template("bank_display.html", banks=banks, reciver_mobile=reciver_mobile, sender_mobile=sender_mobile, sender_bank_name=sender_bank_name)
+
 @app.route('/transfer',methods=['GET', 'POST'])
 def transfer():
     if request.method == 'GET':
         mobile = request.args.get('mobile')
         bank_name = request.args.get('bank_name')
+        # print("sender:",mobile)
         return render_template("balance.html", check="GET_transfer", mobile=mobile,bank_name=bank_name)
     else:
-        mobile = request.form.get('mobile_input')
-        cursor.execute("SELECT bank_name FROM account WHERE phone = %s", (mobile,))
-        user=cursor.fetchone()
-        if not user:
-            return "mobile number is not registerd"
-        print("account:",user)
+        mobile = request.form.get('reciver_mobile')
+        bank_name = request.form.get('reciver_bank_name')
+        sender_mobile = request.form.get('sender_mobile')
+        sender_bank_name = request.form.get('sender_bank_name')
+        amount = request.form.get('amount')
+        # print("sender",sender_bank_name)
         
-        return "Transfer page coming soon"
+        cursor.execute("SELECT * FROM user WHERE phone = %s", (mobile,))
+        user=cursor.fetchone()
+        
+        cursor.execute("SELECT RIGHT(account_number , 4) AS four_digit FROM account WHERE phone = %s AND bank_name = %s",(mobile, bank_name))
+        last_four_digits=cursor.fetchone()
+        
+        cursor.execute("UPDATE account SET amount = amount + %s WHERE phone = %s AND bank_name = %s", (amount,mobile,bank_name))
+        db.commit()
+        # sending email to  reciver
+        if cursor.rowcount>0:
+            send_email_alert(
+                to_email=user['email'],
+                subject="Transaction Alert",
+                body=f"Dear customer, amount  {amount} credited to your Acc No. XXXXXX{last_four_digits['four_digit']} on {current_time} AVl. Balance 50000"
+            ) 
+            
+        cursor.execute("SELECT * FROM user WHERE phone = %s", (sender_mobile,))
+        sender=cursor.fetchone()
+        
+        cursor.execute("SELECT RIGHT(account_number , 4) AS four_digits FROM account WHERE phone = %s AND bank_name = %s",(sender_mobile, sender_bank_name))
+        last_four_digit=cursor.fetchone()
+        
+        cursor.execute("UPDATE account SET amount = amount - %s WHERE phone= %s AND bank_name = %s", (amount,sender_mobile,sender_bank_name))
+        db.commit()
+        
+        #sending email to sender
+        
+        if cursor.rowcount>0:
+            send_email_alert(
+                to_email=sender['email'],
+                subject="Transaction Alert",
+                body=f"Dear customer, amount  {amount} debited from  your Acc No. XXXXXX{last_four_digit['four_digits']} on {current_time} AVl. Balance 50000"
+            )
+            
+        cursor.execute("INSERT INTO transactions(phone,bank_name,amount,type) VALUES (%s,%s,%s,%s)",(mobile,bank_name,amount,"credited"))
+        db.commit()
+        cursor.execute("INSERT INTO transactions(phone,bank_name,amount,type) VALUES (%s,%s,%s,%s)",(sender_mobile,sender_bank_name,amount,"debited"))
+        db.commit()
+        return render_template("balance.html", check="POST_transfer")
 
-@app.route('/history')
+
+@app.route('/history',methods=["GET"])
 def history():
-    return "Transaction history page coming soon"
-
-@app.route('/exit')
-def exit():
-    return redirect('/')
+    mobile=request.args.get('mobile')
+    bank_name=request.args.get('bank_name')
+    print("mobile:",mobile)
+    print("bank:",bank_name)
+    cursor.execute("SELECT * FROM transactions WHERE phone=%s AND bank_name=%s",(mobile,bank_name))
+    user=cursor.fetchall()
+    print(user)
+    return render_template("balance.html",check="history",history=user , mobile=mobile)
 
 if __name__=='__main__':
     app.run(debug=True)

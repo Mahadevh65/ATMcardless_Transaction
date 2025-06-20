@@ -4,82 +4,9 @@
     <meta charset="UTF-8">
     <title>Balance</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static' ,filename='css/balance.css')}}">
 </head>
 <body>
-    <style>
-        body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-}
-
-.atm-container {
-    background: #2c3e50;
-    border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-    padding: 30px;
-    /* max-width: 600px; */
-    width: 100%;
-}
-
-.atm-screen {
-    background: #1a1a1a;
-    border-radius: 15px;
-    padding: 0;
-    min-height: 500px;
-    border: 3px solid #34495e;
-    position: relative;
-    overflow: hidden;
-}
-h2{
-    color: #3498db;
-    text-align:center;
-}
-.withdraw-msg {
-    margin-top: 30%;
-    color:green;
-    font-size:25px;
-}
-.amount-lable{
-    color:white;
-    font-size:20px;
-    margin-left:50px;
-}
-#amount {
-    height: 30px;
-    border-radius:5px;
-    width:80%;
-    margin-left:20px;
-}
-.withdraw-btn{
-    margin-left: 30%;
-    border-radius: 5px;
-    padding: 10px 20px;
-    font-size: 18px;
-
-}
-.withdraw-btn:hover{
-    background-color: green;
-    cursor:pointer;
-}
-.balance-show{
-    margin-top:40%;
-}
-.balance-btn {
-    margin-left: 40%;
-    border-radius: 20px;
-    padding: 10px 20px;
-    font-size: 18px;
-}
-.balance-btn:hover{
-    background-color: red;
-    cursor:pointer;
-}
-</style>
     <main>
         <!-- Content goes here -->
         <div class="atm-container">
@@ -110,17 +37,48 @@ h2{
 
                 <!--Transfer Amount-->
                 {%elif check=="GET_transfer"%}
-                <form method="POST" action="/transfer">
+                <form method="POST" action="/bank_display" class="form-container">
                     <label for="mobile" class="amount-label">Enter Mobile Number To Transfer</label><br><br>
-                    <input type="number" name="mobile_input" id="mobile" required>
-                    <input type="hidden" name="mobile" value="{{mobile}}">
-                    <input type="hidden" name="bank_name" value="{{bank_name}}"><br><br>
-                    <button type="submit"> submit</button>
+                    <input type="text" name="reciver_mobile" id="mobile" class="mobile-input" required>
+                    <input type="hidden" name="sender_mobile" value="{{mobile}}">
+                    <input type="hidden" name="sender_bank_name" value="{{bank_name}}"><br><br>
+                    <button type="submit" class="submit-btn"> submit</button>
                 </form>
+                {%elif check=="POST_transfer"%}
+                <input type="hidden" name="bank_name"id="bank_name">
+
+
+                <!--Transaction History-->
+                {%elif check=="history"%}
+                <h2>Transaction History for {{ mobile }}</h2>
+                {% if history %}
+                    <table class="transaction-table">
+                        <thead class="table-header">
+                            <tr>
+                                <th>Bank</th>
+                                <th>Amount</th>
+                                <th>Type</th>
+                                <th>Date & Time</th>
+                            </tr>
+                        </thead>
+                    <tbody>
+                    {% for txn in history %}
+                        <tr class="table-row">
+                            <td>{{ txn.bank_name }}</td>
+                            <td>₹{{ txn.amount }}</td>
+                            <td>{{ txn.type }}</td>
+                            <td>{{ txn.currentTime }}</td>
+                        </tr>
+                    {% endfor %}
+                    {%endif%}
+                    </tbody>
+                </table>
                 {%endif%}
             </div>
 
         </div>
     </main>
+
+    
 </body>
 </html>
