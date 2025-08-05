@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OTP Verification</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+</head>
+<body>
+    {%if alert%}
+    <script>
+        alert("{{alert_msg}}");
+    </script>
+    {%endif%}
+    <form method="POST" action="/send_otp">
+        <input type="text" name="OTP" placeholder="Enter 6 digit OTP" required>
+        <input type="hidden" name="mobile" value="{{mobile}}">
+        <input type="hidden" name="bank" value="{{bank_name}}">
+        <button type="submit">Submit</button>
+    </form>
+</body>
+</html>

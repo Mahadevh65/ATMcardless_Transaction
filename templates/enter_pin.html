@@ -109,7 +109,7 @@
         <div class="screen biometric-screen" id="biometricScreen">
             <div class="biometric-content">
                 <h2 class="top-header">Facial Biometric Authentication</h2>
-                {%if check%}
+                {%if valid_pin%}
                 <form method="POST" action="/menu">
                 <input type="hidden" name="mobile" value="{{ mobile }}">
                 <input type="hidden" name="bank" value="{{ bank }}">
@@ -117,8 +117,12 @@
                 <input type="password" name="pin" id="pin" maxlength="4" required><br><br>
                 <button type="submit" class="submit-btn">Submit</button>
                 </form>
+
+                <!--pin ganration-->
+
+
                 {%else%}
-                <form method="GET" action="/generate_pin">
+                <form method="GET" action="/send_otp">
                     <input type="hidden" name="mobile" value="{{mobile}}">
                     <input type="hidden" name="bank" value="{{bank}}">
                     <button type="submit"> Generate PIN</button>

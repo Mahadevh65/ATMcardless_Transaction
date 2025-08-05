@@ -10,8 +10,8 @@ import pymysql
 import smtplib
 from email.message import EmailMessage
 from datetime import datetime
-
-
+import random
+from flask import session
 app=Flask(__name__)
 
 db = pymysql.connect(
@@ -31,7 +31,7 @@ def send_email_alert(to_email, subject, body):
     msg['From'] = 'mahadevhulsure65@gmail.com'
     msg['To'] = to_email
 
-    # Use your Gmail or SMTP credentials
+    #Gmail or SMTP credentials
     server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
     server.login('mahadevhulsure65@gmail.com', 'yfka ztjg quct srmw')  # Use app password, not regular password
     server.send_message(msg)
@@ -101,6 +101,17 @@ def authenticate(known_face_path):
     if not authenticated:
        return False
 
+
+def OTPGenerator():
+    digits="0123456789"
+    OTP=""
+    for i in range(6):
+        OTP += digits[random.randint(0,9)]
+    return OTP
+
+# otp=OTPGenerator()
+# print("OTP:",otp)
+
 @app.route('/', methods=['GET'])
 def base():
     return render_template('index.html')
@@ -140,9 +151,39 @@ def enter_pin():
     mobile = request.args.get('mobile')
     bank = request.args.get('bank')
     if validate_pin(mobile,bank):
-        return render_template("enter_pin.html", mobile=mobile, bank=bank, check=True)
+        return render_template("enter_pin.html", mobile=mobile, bank=bank, valid_pin=True)
     else:
-        return render_template("enter_pin.html", check=False, mobile=mobile, bank=bank) 
+        return render_template("enter_pin.html", valid_pin=False, mobile=mobile, bank=bank) 
+
+
+app.secret_key ='MAHADEV'  
+  
+@app.route('/send_otp',methods=['GET','POST'])
+def otp():
+    
+    if request.method == 'GET':
+        mobile = request.args.get('mobile')
+        bank_name = request.args.get('bank')
+        otp=OTPGenerator()
+        session['otp'] = otp 
+        print("OTP in get  method:",otp)
+        cursor.execute("SELECT email FROM user WHERE phone = %s",(mobile,))
+        email=cursor.fetchone()
+        send_email_alert(email['email'],"OTP for pin Generation",f"Your OTP {otp} please don't share with anyone")
+        return render_template("OTP.html", mobile=mobile , bank_name=bank_name)
+    else:
+        userotp = request.form.get('OTP')
+        mobile = request.form.get('mobile')
+        bank_name = request.form.get('bank')
+        otp = session.get('otp')
+        print("OTP:",otp)
+        if userotp == otp:
+            return render_template("generate_pin.html", mobile=mobile, bank_name=bank_name, check="GET")
+        else:
+            return render_template("OTP.html", alert_msg="Invalid OTP.", alert=True)
+        
+        
+        
 # menu route
 @app.route('/generate_pin', methods=['GET','POST'])
 def generate_pin():
