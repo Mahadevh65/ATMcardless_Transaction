@@ -1,9 +1,6 @@
 import face_recognition
 import cv2
 from flask import Flask, request,render_template, redirect
-# Load the known image (pre-enrolled user face)
-# known_image = face_recognition.load_image_file("images/mahadev.jpg")
-# known_face_encoding = face_recognition.face_encodings(known_image)[0]
 import time
 import mysql.connector
 import pymysql
@@ -17,7 +14,7 @@ app=Flask(__name__)
 db = pymysql.connect(
     host="localhost",
     user="root",
-    password="Mahadev@2004",
+    password="",
     database="atmdata",
     cursorclass=pymysql.cursors.DictCursor
 )
@@ -31,9 +28,9 @@ def send_email_alert(to_email, subject, body):
     msg['From'] = 'mahadevhulsure65@gmail.com'
     msg['To'] = to_email
 
-    # Use your Gmail or SMTP credentials
+    # Gmail or SMTP credentials
     server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-    server.login('mahadevhulsure65@gmail.com', 'yfka ztjg quct srmw')  # Use app password, not regular password
+    server.login('mahadevhulsure65@gmail.com', '')  
     server.send_message(msg)
     server.quit()
     
@@ -67,10 +64,7 @@ def authenticate(known_face_path):
     #     print("capture successfully")
     # Resize for faster processing
         small_frame = cv2.resize(frame, (0, 0), fx=0.25, fy=0.25)
-        rgb_small_frame = small_frame[:, :, ::-1]  # BGR to RGB
-
-    # Detect face(s) and get encodings
-    # face_locations = face_recognition.face_locations(rgb_small_frame)
+        rgb_small_frame = small_frame[:, :, ::-1] 
         face_locations = face_recognition.face_locations(frame)
         face_encodings = face_recognition.face_encodings(frame, face_locations)
     # face_encodings = face_recognition.face_encodings(rgb_small_frame, known_face_locations=face_locations)
