@@ -1,0 +1,11 @@
+Flask
+opencv-python
+face_recognition
+insightface
+numpy
+pytz
+pymysql
+mysql-connector-python
+cryptography
+email-validator
+gunicorn
