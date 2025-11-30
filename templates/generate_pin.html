@@ -4,20 +4,62 @@
     <meta charset="UTF-8">
     <title>Generate PIN</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename="style.css")}}">
 </head>
 <body>
-    <h1>Generate PIN</h1>
+    <style>
+    #atm-pin{
+        background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ffff;
+            border-radius: 5px;
+            padding: 16px 20px;
+            font-size: 16px;
+            color: #00ffff;
+            width: 50%;
+            margin-top:60px;
+            margin-left: 30%;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 0 10px rgba(0, 255, 255, 0.3);
+                /*inset 0 0 10px rgba(0, 255, 255, 0.1);*/
+    }
+    .submit-btn{
+        tetxt-align:center;
+        border:none;
+        border-radius: 5px;
+        font-size: 16px;
+        padding : 12px 20px;
+        margin-left: 50%;
+        background-color : green;
+        cursor: pointer;
+    }
+    .pin_generated{
+        color : rgb(0,255,0);
+        text-align : center;
+    }
+    a{
+        text-decoration: none;
+        text-align : center;
+        font-size: 20px;
+    }
+</style>
+    <div class="atm-container">
+        <div class="atm-screen">
 
-    {%if check=="GET"%}
-    <form method="POST" action="/generate_pin">
-        <input type="hidden" name="mobile" value="{{ mobile }}">
-        <input type="hidden" name="bank" value="{{ bank_name }}">
-        <label for="pin_length">PIN Length:</label>
-        <input type="number" id="pin_length" name="pin" required>
-        <button type="submit">Generate</button>
-    </form>
-    {%elif check=="POST"%}
-    <h2>generated pin {{pin}}</h2>
-    {%endif%}
+            {%if check=="GET"%}
+            <form method="POST" action="/generate_pin">
+            <input type="hidden" name="mobile" value="{{ mobile }}">
+            <input type="hidden" name="bank" value="{{ bank_name }}">
+            <input type="text" id="atm-pin" name="pin" placeholder="enter 4 digit pin"  maxlength="4" minlenght="4" required><br><br>
+            <button type="submit" class="submit-btn">Generate</button>
+            </form>
+            {%elif check=="POST"%}
+                <h2 class="pin_generated">Pin Generated successfully</h2><br><br>
+                <a href="/">Cancel</a>
+            {%endif%}
+
+        </div>
+    </div>
 </body>
 </html>

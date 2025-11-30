@@ -4,19 +4,58 @@
     <meta charset="UTF-8">
     <title>OTP Verification</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    {%if alert%}
-    <script>
-        alert("{{alert_msg}}");
-    </script>
-    {%endif%}
-    <form method="POST" action="/send_otp">
-        <input type="text" name="OTP" placeholder="Enter 6 digit OTP" required>
-        <input type="hidden" name="mobile" value="{{mobile}}">
-        <input type="hidden" name="bank" value="{{bank_name}}">
-        <button type="submit">Submit</button>
-    </form>
+    <style>
+        #otp{
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid #00ffff;
+            border-radius: 5px;
+            padding: 16px 20px;
+            font-size: 16px;
+            color: #00ffff;
+            width: 50%;
+            margin-top:60px;
+            margin-left: 30%;
+            font-family: 'Courier New', monospace;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 0 10px rgba(0, 255, 255, 0.3);
+                /*inset 0 0 10px rgba(0, 255, 255, 0.1);*/
+       }
+       .submit-btn{
+            border: none;
+            outline: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            transition: all 0.3s ease;
+            border-radius: 6px;
+            padding: 12px 20px;
+            font-weight: 500;
+            margin-left: 50%;
+            background-color: green;
+      }
+    </style>
+    <div class="atm-container">
+        <div class="atm-screen">
+            {%if alert%}
+            <script>
+                alert("{{alert_msg}}");
+            </script>
+            {%endif%}
+            <form method="POST" action="/send_otp">
+                <input type="text" name="OTP" placeholder="Enter 6 digit OTP" id="otp" required><br><br>
+                <input type="hidden" name="mobile" value="{{mobile}}">
+                <input type="hidden" name="bank" value="{{bank_name}}">
+                <button type="submit" class="submit-btn">Submit</button>
+            </form>
+        </div>
+    </div>
+
 </body>
 </html>

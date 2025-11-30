@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='atmhome.css') }}">
 </head>
 <body>
+    
     <style>
          .msg{
             color:red;
@@ -41,6 +42,7 @@
                         </form>
                     <p class="input-help">Please enter the mobile number registered with your account</p>
                     <h2 class="msg">{{message}}</h2>
+                    <div id="msg-div"></div>
                     {%if user %}
                     <a href="/"> Re-enter number </a>
                     {%endif%}
@@ -48,5 +50,13 @@
             </div>
     </div>
 </div>
+<script>
+    const btn=document.getElementById('proceedBtn');
+    btn.addEventListener('click',function(){
+        const msg=document.getElementById('msg-div');
+        msg.innerHTML ="<p>Face Authenticating.... </p><br> <p>Please look at webcam and blink your eyes</p>";
+        msg.style.color="#27ae60";
+    })
+</script>
 </body>
 </html>

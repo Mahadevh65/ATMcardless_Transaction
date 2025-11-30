@@ -385,8 +385,8 @@
             
             <div class="profile-section">
                 <img src="{{url_for('static', filename=face)}}" alt="User Profile" class="profile-image">
-                <div class="welcome-text">Welcome {{name}}</div>
-                <div class="account-info">Account: {{account}}</div>
+                <div class="welcome-text">Welcome{{name}} </div>
+                <div class="account-info">Account:{{account}} </div>
             </div>
 
             <div class="action-grid">
@@ -443,6 +443,6 @@
         window.location.href="/";
     })
     </script>
-        
+    {% extends "stopwatch.html" %}
 </body>
 </html>

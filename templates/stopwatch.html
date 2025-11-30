@@ -1,0 +1,146 @@
+<style>
+    /*    .stopwatch-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 300px;
+            height: 300px;
+        }*/
+
+        .stopwatch-circle {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color : green
+        }
+
+        .stopwatch-inner {
+            position: fixed;
+            top: 110px;
+            right: 70px;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 8px solid #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color : green;
+        }
+
+
+        .progress-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            transform: rotate(-90deg);
+        }
+
+        .progress-circle {
+            fill: none;
+            stroke: #667eea;
+            stroke-width: 8;
+            stroke-dasharray: 847.8;
+            stroke-dashoffset: 847.8;
+            animation: countdown 60s linear infinite;
+        }
+
+        @keyframes countdown {
+            from {
+                stroke-dashoffset: 0;
+            }
+            to {
+                stroke-dashoffset: 847.8;
+            }
+        }
+
+        .center-dot {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #667eea;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+
+        .time-display {
+            position: absolute;
+            text-align: center;
+            width: 100%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 5;
+        }
+
+        .time-display span {
+            font-size: 48px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .label {
+            font-size: 12px;
+            color: #999;
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+    </style>
+    <div class="stopwatch-container">
+            
+            <div class="stopwatch-inner">
+                <svg class="progress-ring" viewBox="0 0 300 300">
+                    <circle class="progress-circle" cx="150" cy="150" r="135"></circle>
+                </svg>
+                
+                <div class="time-display">
+                    <span id="timer">60</span>
+                    <div class="label">seconds</div>
+                </div>
+            </div>
+    </div>
+
+    <script>
+        let startTime = Date.now();
+        let duration = 60000;
+
+     function updateTimer() {
+        // Calculate how much time has passed
+        const elapsed = Date.now() - startTime;
+
+        // Calculate remaining time
+        const remaining = Math.max(0, duration - elapsed);
+
+        // Convert to whole seconds
+        const secondsLeft = Math.floor(remaining / 1000);
+
+        // Display the remaining seconds
+        document.getElementById('timer').textContent = 
+            String(secondsLeft).padStart(2, '0');
+
+        // If time is up, redirect
+        if (remaining <= 0) {
+            window.location.href = "/";  // Redirect to home route
+            return;
+        }
+
+        // Keep updating smoothly
+        requestAnimationFrame(updateTimer);
+    }   
+        updateTimer();
+
+        // If startTime doesn't exist in localStorage, set it now
+updateTimer();
+
+    </script>

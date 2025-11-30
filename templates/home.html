@@ -401,6 +401,11 @@ h2{
     color: #3498db;
     text-align:center;
 }
+
+.Retry-msg{
+    text-align:center;
+    margin-left:50%;
+}
 </style>
     <div class="atm-container">
         <div class="atm-screen">
@@ -426,7 +431,6 @@ h2{
                     </li>
                     {% endfor %}
                 </ul>-->
-                <!-- Replace your existing biometric-screen div with this structure -->
 <div class="screen biometric-screen" id="biometricScreen">
     <div class="atm-options-container">
         <div class="biometric-content">
@@ -436,7 +440,7 @@ h2{
             <p style="color: #ecf0f1; margin-bottom: 50px;">Please choose your bank account</p>
             
             {% else %}
-            <h2 class="fail">{{fail}}</h2>
+            <!--<h2 class="fail">{{fail}}</h2>-->
             <p style="color: #ecf0f1; margin-bottom: 50px;">Authentication failed. Please try again.</p>
             {% endif %}
         </div>
@@ -491,11 +495,11 @@ h2{
 </div>
             {%else%}
             <h2 class="fail">{{fail}}</h2>
-            <a href="/">Retry..</a>
+            <a href="/" class="Retry-msg">Retry..</a>
             {% endif %}
         </div>
     </div>
     </div>
-    
+    <!--{% extends "stopwatch.html" %}-->
 </body>
 </html>
