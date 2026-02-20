@@ -26,7 +26,7 @@ jobs:
 
       - name: Check Python Syntax
         run: |
-          python -m py_compile app.py
+          python -m py_compile atm.py
 
       - name: Show Success Message
         run: echo "CI Pipeline executed successfully!"
