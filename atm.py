@@ -2,7 +2,7 @@ import face_recognition
 import cv2
 from flask import Flask, request,render_template, redirect
 import time
-import mysql.connector
+#import mysql.connector
 import pymysql
 import smtplib
 from email.message import EmailMessage
@@ -45,9 +45,9 @@ aesgcm = AESGCM(AES_KEY)
 
 
 
-# ----------------------------
+# 
 # ENCRYPT PIN (returns iv + ciphertext)
-# ----------------------------
+# 
 def encrypt_pin(pin: str):
     iv = os.urandom(12)  # 96-bit nonce
     encrypted = aesgcm.encrypt(iv, pin.encode(), None)
@@ -76,9 +76,9 @@ def send_email_alert(to_email, subject, body):
     msg['From'] = 'mahadevhulsure65@gmail.com'
     msg['To'] = to_email
 
-    #Gmail or SMTP credentials
+    # SMTP server credentials
     server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-    server.login('mahadevhulsure65@gmail.com', 'yfka ztjg quct srmw')  # Use app password, not regular password
+    server.login('mahadevhulsure65@gmail.com', 'yfka ztjg quct srmw')  
     server.send_message(msg)
     server.quit()
     
@@ -234,7 +234,7 @@ def check_liveness_blink():
     blink_detected = False
 
     start_time = time.time()
-    timeout = 3  # seconds
+    timeout = 5  # seconds
 
     while True:
         ret, frame = cap.read()
@@ -324,7 +324,7 @@ def home():
             update_auth_count(mobile)
             update_txn_count(mobile) 
             return render_template('home.html', mobile=mobile, success=success ,ask_pin=True,accounts=accounts)
-        # elif check_liveness_blink() is False:
+        # elif  res==False:
         #     fail = "USER is not live.... or please blink your eyes to verify liveness"
         #     subject = "Alert!"
         #     body = "unauthorized access to your bank account"
@@ -471,9 +471,9 @@ def balance():
     user = cursor.fetchone()
     #print("user:", user)
     #print("user email:",user['email'])
-    cursor.execute("SELECT * FROM account WHERE bank_name = %s ", (bank_name,))
+    cursor.execute("SELECT * FROM account WHERE bank_name = %s and phone = %s ", (bank_name,mobile))
     account=cursor.fetchone()
-    #print("account:",account)
+    print("account:",account)
     
     # if user is not None:
     #     send_email_alert(
@@ -483,7 +483,7 @@ def balance():
     #     )
         
     # print("user:", user)
-    return render_template("balance.html",balance=account['amount'], check="inquery", mobile=mobile) # You can pull from DB later
+    return render_template("balance.html",balance=account['amount'], check="inquery", mobile=mobile) 
 
 @app.route('/withdraw', methods=['GET', 'POST'])
 def withdraw():
@@ -613,3 +613,5 @@ def history():
 
 if __name__=='__main__':
     app.run(debug=True)
+    
+
